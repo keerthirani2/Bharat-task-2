@@ -1,0 +1,176 @@
+Data Collection:
+import pandas as pd
+# Read the dataset
+df = pd.read_csv("bharat task 2 dataset.csv")
+df
+
+Data Cleaning:
+# Drop irrelevant columns
+df1 = df.drop(['Name','PassengerId','Ticket','Cabin'], axis=1)
+# Calculate correlation matrix and plot heatmap
+correlation_matrix = df1.corr()
+print(correlation_matrix)
+sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm")
+plt.show()
+# Create the 'FamilySize' column
+df2 = df1.copy()
+df2['FamilySize'] = df2['SibSp'] + df2['Parch']
+df2.drop(['SibSp' , 'Parch'], axis=1, inplace=True)
+
+Data Preprocessing:
+from sklearn.preprocessing import OneHotEncoder
+# Encode 'Embarked' column using OneHotEncoder
+encoder = OneHotEncoder(sparse=False)
+embarked_reshaped = df2['Embarked'].values.reshape(-1, 1)
+encoded_embarked = encoder.fit_transform(embarked_reshaped)
+encoded_embarked_df = pd.DataFrame(encoded_embarked, columns=encoder.categories_[0])
+df2 = pd.concat([df2, encoded_embarked_df], axis=1)
+df2.drop('Embarked', axis=1, inplace=True)
+print(df2)
+cleandf = df2
+Model Training and Evaluation:
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import cross_val_score
+
+# Split the dataset into training and testing sets
+X = df2.drop("Survived",axis=1)
+y = df2['Survived']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state = 42)
+print("Training dataset", X_train.shape, y_train.shape)
+print("Testing dataset", X_test.shape, y_test.shape)
+
+# Logistic Regression
+logistic_model = LogisticRegression()
+logistic_model.fit(X_train, y_train)
+y_pred = logistic_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(logistic_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+
+# Decision Trees
+decision_tree_model = DecisionTreeClassifier()
+decision_tree_model.fit(X_train, y_train)
+y_pred = decision_tree_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(decision_tree_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+
+# Random Forests
+random_forest_model = RandomForestClassifier()
+random_forest_model.fit(X_train, y_train)
+y_pred = random_forest_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(random_forest_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+
+# Gradient Boosting
+gradient_boosting_model = GradientBoostingClassifier()
+gradient_boosting_model.fit(X_train, y_train)
+y_pred = gradient_boosting_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(gradient_boosting_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+
+# Support Vector Machines (SVM)
+svm_model = SVC()
+svm_model.fit(X_train, y_train)
+y_pred = svm_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(svm_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+
+# Neural Networks
+neural_network_model = MLPClassifier()
+neural_network_model.fit(X_train, y_train)
+y_pred = neural_network_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
+cross_val_scores = cross_val_score(neural_network_model, X_train, y_train, cv=5)
+print("Cross-Validation Scores:", cross_val_scores)
+print("Mean Cross-Validation Score:", cross_val_scores.mean())
+Accuracy Comparison:
+logistic_accuracy =  0.7027027027027027
+decision_tree_accuracy = 0.7297297297297297
+random_forest_accuracy = 0.6216216216216216
+gradient_boosting_accuracy = 0.8378378378378378
+svm_accuracy =0.6216216216216216
+neural_network_accuracy =  0.6486486486486487
+
+accuracies = [logistic_accuracy, decision_tree_accuracy, random_forest_accuracy, gradient_boosting_accuracy, svm_accuracy, neural_network_accuracy]
+algorithms = ['Logistic Regression', 'Decision Tree', 'Random Forest', 'Gradient Boosting', 'SVM', 'Neural Network']
+colors = ['red', 'green', 'blue', 'orange', 'purple', 'cyan']
+
+plt.figure(figsize=(10, 6))
+plt.bar(algorithms, accuracies, color=colors)
+plt.xlabel('Algorithms')
+plt.ylabel('Accuracy')
+plt.title('Accuracy of Different Algorithms')
+plt.xticks(rotation=45)
+plt.ylim(0, 1) 
+plt.show()
+
+plt.figure(figsize=(10, 6))
+plt.plot(algorithms, accuracies, marker='o', linestyle='-', linewidth=2)
+plt.xlabel('Algorithms')
+plt.ylabel('Accuracy')
+plt.title('Accuracy of Different Algorithms Over Time/Iterations')
+plt.xticks(rotation=45)
+plt.ylim(0, 1) 
+plt.show()
+
+
+
+
